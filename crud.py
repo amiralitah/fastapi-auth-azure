@@ -1,25 +1,42 @@
 from sqlalchemy.orm import Session
-from . import models
+import models, schemas
 
-def get_user_auth_by_email(db: Session, email: str):
-    return db.query(models.UserAuth).filter(models.UserAuth.provider_subject == email).first()
-
-def create_user(db: Session, username, display_name, phone_number, email, password_hash):
-    user = models.User(username=username, display_name=display_name, phone_number=phone_number)
-    db.add(user)
+# ---- USERS ----
+def create_user(db: Session, user: schemas.UserCreate):
+    db_user = models.User(**user.dict())
+    db.add(db_user)
     db.commit()
-    db.refresh(user)
+    db.refresh(db_user)
+    return db_user
 
-    auth = models.UserAuth(user_id=user.user_id, provider="local", provider_subject=email, password_hash=password_hash)
-    db.add(auth)
+# ---- BRANDS ----
+def create_brand(db: Session, brand: schemas.BrandCreate):
+    db_brand = models.Brand(**brand.dict())
+    db.add(db_brand)
     db.commit()
-    db.refresh(auth)
+    db.refresh(db_brand)
+    return db_brand
 
-    return user
-
-def save_refresh_token(db: Session, user_id: str, token: str, expires_at):
-    refresh_token = models.RefreshToken(user_id=user_id, token=token, expires_at=expires_at, is_revoked=False)
-    db.add(refresh_token)
+# ---- PERFUMES ----
+def create_perfume(db: Session, perfume: schemas.PerfumeCreate):
+    db_perfume = models.Perfume(**perfume.dict())
+    db.add(db_perfume)
     db.commit()
-    db.refresh(refresh_token)
-    return refresh_token
+    db.refresh(db_perfume)
+    return db_perfume
+
+# ---- LISTINGS ----
+def create_listing(db: Session, listing: schemas.ListingCreate):
+    db_listing = models.Listing(**listing.dict())
+    db.add(db_listing)
+    db.commit()
+    db.refresh(db_listing)
+    return db_listing
+
+# ---- LISTING IMAGES ----
+def create_listing_image(db: Session, listing_id: str, image: schemas.ListingImageCreate):
+    db_image = models.ListingImage(**image.dict(), listing_id=listing_id)
+    db.add(db_image)
+    db.commit()
+    db.refresh(db_image)
+    return db_image
