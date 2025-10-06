@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in to ScentTrade</title>
+    <link rel="stylesheet" href="/static/css/auth.css">
+</head>
+<body>
+    <div class="auth-container">
+        <aside class="auth-illustration">
+            <h1>Welcome to ScentTrade</h1>
+            <p>Manage your fragrance collection, explore new scents, and connect with other enthusiasts with a secure account.</p>
+            <ul>
+                <li>🌟 Curate your personal perfume library</li>
+                <li>🔁 Trade fragrances with trusted members</li>
+                <li>💬 Chat with scent lovers worldwide</li>
+            </ul>
+        </aside>
+        <section class="auth-content">
+            <div class="tab-group" role="tablist">
+                <button class="tab active" id="signin-tab" data-target="signin-form" role="tab" aria-selected="true">Sign in</button>
+                <button class="tab" id="signup-tab" data-target="signup-form" role="tab" aria-selected="false">Create account</button>
+            </div>
+
+            <form id="signin-form" class="active" autocomplete="on">
+                <div class="form-group">
+                    <label for="signin-email">Email address</label>
+                    <input type="email" id="signin-email" name="email" placeholder="you@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="signin-password">Password</label>
+                    <input type="password" id="signin-password" name="password" placeholder="Enter your password" required>
+                </div>
+                <div class="additional-links">
+                    <label>
+                        <input type="checkbox" name="remember"> Keep me signed in
+                    </label>
+                    <a href="#">Forgot password?</a>
+                </div>
+                <button type="submit">Sign in</button>
+                <div class="divider">or continue with</div>
+                <div class="social-buttons">
+                    <button type="button" class="social-button">Azure AD</button>
+                    <button type="button" class="social-button">Google</button>
+                </div>
+            </form>
+
+            <form id="signup-form" autocomplete="on">
+                <div class="form-group">
+                    <label for="signup-name">Full name</label>
+                    <input type="text" id="signup-name" name="name" placeholder="Alex Perfumer" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-email">Email address</label>
+                    <input type="email" id="signup-email" name="email" placeholder="you@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <input type="password" id="signup-password" name="password" placeholder="Create a password" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-confirm-password">Confirm password</label>
+                    <input type="password" id="signup-confirm-password" name="confirm_password" placeholder="Re-enter password" required>
+                </div>
+                <button type="submit">Create account</button>
+                <p class="additional-links">
+                    Already have an account? <a href="#" id="switch-to-signin">Sign in</a>
+                </p>
+            </form>
+        </section>
+    </div>
+
+    <script>
+        const tabs = document.querySelectorAll('.tab');
+        const forms = document.querySelectorAll('form');
+        const switchToSignIn = document.getElementById('switch-to-signin');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                forms.forEach(form => form.classList.remove('active'));
+
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.target).classList.add('active');
+            });
+        });
+
+        if (switchToSignIn) {
+            switchToSignIn.addEventListener('click', (event) => {
+                event.preventDefault();
+                document.getElementById('signin-tab').click();
+            });
+        }
+    </script>
+</body>
+</html>
