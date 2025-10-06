@@ -1,9 +1,17 @@
+from pathlib import Path
+
 from fastapi import FastAPI, Depends
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 import crud, schemas, models
 from database import SessionLocal, engine
 
 app = FastAPI(title="ScentTrade API")
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+AUTH_PAGE_PATH = Path("templates/auth.html")
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -13,6 +21,13 @@ def get_db():
         yield db
     finally:
         db.close()
+
+# ---- AUTH PAGES ----
+@app.get("/auth", response_class=HTMLResponse)
+def auth_page():
+    """Serve the combined sign-in/sign-up experience."""
+
+    return HTMLResponse(AUTH_PAGE_PATH.read_text(encoding="utf-8"))
 
 # ---- USERS ----
 @app.post("/users/", response_model=schemas.User)
